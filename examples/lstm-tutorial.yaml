@@ -63,8 +63,8 @@ spec:
           - train-frac: "0.8"
           - window-size: "10"
           artifacts:
-          - data
-             from: '{{steps.generate-data.outputs.artifacts.data}}'
+          - name: data
+            from: '{{steps.generate-data.outputs.artifacts.data}}'
     - - name: build-model
         template: build-model
         arguments:
@@ -75,8 +75,8 @@ spec:
           - hnodes: "128"
           - dropout: "0.1"
           artifacts:
-          - preprocessed-data
-             from: '{{steps.preprocess-data.outputs.artifacts.testing-data-windows}}'
+          - name: preprocessed-data
+            from: '{{steps.preprocess-data.outputs.artifacts.testing-data-windows}}'
     - - name: train-model
         template: train-model
         arguments:
@@ -89,10 +89,10 @@ spec:
           - val-split: "0.1"
           - learning-rate: "0.01"
           artifacts:
-          - model
-              from: '{{steps.build-model.outputs.artifacts.model}}'
-          - training-data
-              from: '{{steps.preprocess-data.outputs.artifacts.training-data-windows}}'
+          - name: model
+            from: '{{steps.build-model.outputs.artifacts.model}}'
+          - name: training-data
+            from: '{{steps.preprocess-data.outputs.artifacts.training-data-windows}}'
     - - name: predict-using-model
         template: predict-using-model
         arguments:
@@ -101,7 +101,7 @@ spec:
           - docker-image: z-ml
           - docker-tag: latest
           artifacts:
-          - model
-              from: '{{steps.train-model.outputs.artifacts.trained-model}}'
-          - testing-data
-              from: '{{steps.preprocess-data.outputs.artifacts.testing-data-windows}}'
+          - name: model
+            from: '{{steps.train-model.outputs.artifacts.trained-model}}'
+          - name: testing-data
+            from: '{{steps.preprocess-data.outputs.artifacts.testing-data-windows}}'
